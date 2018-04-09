@@ -183,7 +183,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh-47354
+  m_Name: pb_Mesh14612
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -362,10 +362,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 3
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 5
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -383,6 +383,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpeedMove: 10
+  ForceJump: 70
+  NJump: 2
+  LayerWakeable:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!4 &443457533
 Transform:
   m_ObjectHideFlags: 0
@@ -410,7 +415,7 @@ GameObject:
   - component: {fileID: 500058568}
   - component: {fileID: 500058567}
   - component: {fileID: 500058566}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -799,7 +804,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh-47772
+  m_Name: pb_Mesh14570
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -1018,7 +1023,7 @@ GameObject:
   - component: {fileID: 1001900213}
   - component: {fileID: 1001900212}
   - component: {fileID: 1001900211}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1415,7 +1420,7 @@ GameObject:
   - component: {fileID: 1123427008}
   - component: {fileID: 1123427007}
   - component: {fileID: 1123427006}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1804,7 +1809,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh-22350
+  m_Name: pb_Mesh14584
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -2056,7 +2061,7 @@ GameObject:
   - component: {fileID: 1519093329}
   - component: {fileID: 1519093328}
   - component: {fileID: 1519093327}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2448,7 +2453,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1739205679}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2477,7 +2482,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh-22036
+  m_Name: pb_Mesh14544
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -2610,7 +2615,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 2107420294}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LD
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -13,6 +13,7 @@ public class PawnComponent : MonoBehaviour {
 		_trans = transform;
 		_sr = GetComponentInChildren<SpriteRenderer>();
 		_col = GetComponent<BoxCollider2D>();
+		_rigid = GetComponent<Rigidbody2D>();
 		_nJumpLeft = NJump;
 	}
 	private void Reset()
@@ -25,6 +26,7 @@ public class PawnComponent : MonoBehaviour {
 	private void FixedUpdate()
 	{
 		MoveLogic();
+		JumpLogic();
 		//Jump()
 	}
 
@@ -129,7 +131,7 @@ public class PawnComponent : MonoBehaviour {
 			{
 				--_nJumpLeft;
 				StateJump = EJumpState.JUMPING;
-				_inputJumpDown = false;
+				_rigid.velocity = Vector2.zero;
 				_rigid.AddForce(Vector2.up * ForceJump, ForceMode2D.Impulse);
 			}
 			else
@@ -137,7 +139,13 @@ public class PawnComponent : MonoBehaviour {
 		}
 		else
 		{
-			//On s'éclate
+			if (_rigid.velocity.y < 0f)
+				StateJump = EJumpState.FALLING;
+			else if (!_inputJumpDown)
+			{
+				StateJump = EJumpState.FALLING;
+				_rigid.velocity = new Vector2(0f, -5f);
+			}
 		}
 	}
 }
