@@ -13,7 +13,8 @@ public class PawnComponent : MonoBehaviour {
 		_trans = transform;
 		_sr = GetComponentInChildren<SpriteRenderer>();
 		_col = GetComponent<BoxCollider2D>();
-		_rigid = GetComponent<Rigidbody2D>();
+		_physic = GetComponent<Physics2DComponent>();
+		//_rigid = GetComponent<Rigidbody2D>();
 		_nJumpLeft = NJump;
 	}
 	private void Reset()
@@ -38,12 +39,13 @@ public class PawnComponent : MonoBehaviour {
 
 	public void InputMove(float inputX)
 	{
-		_deltaMove += inputX * Time.fixedDeltaTime * SpeedMove;
+		_deltaMove = inputX * SpeedMove;
+		_physic.Move(new Vector2(_deltaMove, 0f));
 	}
 
 	private void MoveLogic()
 	{
-		_trans.position += new Vector3(_deltaMove, 0f, 0f);
+		//_trans.position += new Vector3(_deltaMove, 0f, 0f);
 
 		if (_deltaMove < 0f)
 		{
@@ -72,7 +74,8 @@ public class PawnComponent : MonoBehaviour {
 	public EJumpState StateJump { get; private set; }
 
 	private BoxCollider2D _col;
-	private Rigidbody2D _rigid;
+	//private Rigidbody2D _rigid;
+	private Physics2DComponent _physic;
 
 	private bool _inputJumpDown;
 	private bool _isGrounded;
@@ -131,14 +134,17 @@ public class PawnComponent : MonoBehaviour {
 			{
 				--_nJumpLeft;
 				StateJump = EJumpState.JUMPING;
+				/*
 				_rigid.velocity = Vector2.zero;
 				_rigid.AddForce(Vector2.up * ForceJump, ForceMode2D.Impulse);
+				*/
 			}
 			else
 				UpdateJumpStateFromGround();
 		}
 		else
 		{
+			/*
 			if (_rigid.velocity.y < 0f)
 				StateJump = EJumpState.FALLING;
 			else if (!_inputJumpDown)
@@ -146,6 +152,7 @@ public class PawnComponent : MonoBehaviour {
 				StateJump = EJumpState.FALLING;
 				_rigid.velocity = new Vector2(0f, -5f);
 			}
+			*/
 		}
 	}
 }
