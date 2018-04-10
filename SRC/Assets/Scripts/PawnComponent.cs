@@ -13,7 +13,7 @@ public class PawnComponent : MonoBehaviour {
 		_trans = transform;
 		_sr = GetComponentInChildren<SpriteRenderer>();
 		_col = GetComponent<BoxCollider2D>();
-		_physic = GetComponent<Physics2DComponent>();
+		_physic = GetComponent<Physics2DComponentV2>();
 		//_rigid = GetComponent<Rigidbody2D>();
 		_nJumpLeft = NJump;
 	}
@@ -40,7 +40,7 @@ public class PawnComponent : MonoBehaviour {
 	public void InputMove(float inputX)
 	{
 		_deltaMove = inputX * SpeedMove;
-		_physic.Move(new Vector2(_deltaMove, 0f));
+		_physic.Move(_deltaMove);
 	}
 
 	private void MoveLogic()
@@ -75,10 +75,9 @@ public class PawnComponent : MonoBehaviour {
 
 	private BoxCollider2D _col;
 	//private Rigidbody2D _rigid;
-	private Physics2DComponent _physic;
+	private Physics2DComponentV2 _physic;
 
 	private bool _inputJumpDown;
-	private bool _isGrounded;
 	private int _nJumpLeft;
 
 	public void InputJump(bool isDown)
@@ -86,73 +85,24 @@ public class PawnComponent : MonoBehaviour {
 		_inputJumpDown = isDown;
 	}
 
-
-	private void UpdateJumpStateFromFalling()
-	{
-
-		StateJump = EJumpState.GROUNDED;
-		_isGrounded = true;
-	}
-
-	private bool IsGrounded()
-	{
-		var origin = new Vector2(_trans.position.x + _col.offset.x, _trans.position.y + _col.offset.y - (_col.size.y / 2f));
-		var dir = Vector2.down;
-		var hit = Physics2D.Raycast(origin, dir, 0.05f, LayerWakeable);
-
-		return hit.transform != null;
-	}
-
-	private void UpdateJumpStateFromGround()
-	{
-		_isGrounded = IsGrounded();
-
-		if (StateJump == EJumpState.GROUNDED)
-		{
-			if (!_isGrounded)
-				StateJump = EJumpState.FALLING;
-
-			return;
-		}
-		else if (StateJump == EJumpState.FALLING)
-		{
-			if (_isGrounded)
-			{
-				StateJump = EJumpState.GROUNDED;
-				_nJumpLeft = NJump;
-			}
-
-			return;
-		}
-	}
-
 	private void JumpLogic()
 	{
-		if (StateJump == EJumpState.GROUNDED || StateJump == EJumpState.FALLING)
-		{
-			if (_inputJumpDown && _nJumpLeft > 0)
-			{
-				--_nJumpLeft;
-				StateJump = EJumpState.JUMPING;
-				/*
-				_rigid.velocity = Vector2.zero;
-				_rigid.AddForce(Vector2.up * ForceJump, ForceMode2D.Impulse);
-				*/
-			}
-			else
-				UpdateJumpStateFromGround();
-		}
+		if (_physic.Grounded)
+			StateJump = EJumpState.GROUNDED;
+		else if (_physic.Velocity.y < 0f)
+			StateJump = EJumpState.FALLING;
 		else
+			StateJump = EJumpState.JUMPING;
+
+		if (StateJump == EJumpState.GROUNDED && _inputJumpDown)
 		{
-			/*
-			if (_rigid.velocity.y < 0f)
-				StateJump = EJumpState.FALLING;
-			else if (!_inputJumpDown)
-			{
-				StateJump = EJumpState.FALLING;
-				_rigid.velocity = new Vector2(0f, -5f);
-			}
-			*/
+			_nJumpLeft = NJump - 1;
+			_physic.ImpulseForce(new Vector2(0f, ForceJump));
+		}
+		else if (StateJump == EJumpState.FALLING && _inputJumpDown && _nJumpLeft > 0)
+		{
+			--_nJumpLeft;
+			_physic.ImpulseForce(new Vector2(0f, ForceJump));
 		}
 	}
 }
