@@ -34,13 +34,6 @@ public class Physics2DComponentV2 : MonoBehaviour {
 		_col = GetComponent<BoxCollider2D>();
 	}
 
-	private void OnDrawGizmos()
-	{
-		Gizmos.DrawCube(_col.bounds.min, Vector3.one * 0.05f);
-		Gizmos.DrawCube(_col.bounds.max, Vector3.one);
-	}
-
-
 	private void FixedUpdate()
 	{
 		_box = new Rect(_col.bounds.min.x, _col.bounds.min.y, _col.bounds.size.x, _col.bounds.size.y);
@@ -63,9 +56,9 @@ public class Physics2DComponentV2 : MonoBehaviour {
 	{
 		_velocity = force;
 	}
+
 	private void GravityMove()
 	{
-
 		if (!_grounded)
 		{
 			_velocity.y = Mathf.Max(_velocity.y - Gravity, -Maxfall);
@@ -76,40 +69,42 @@ public class Physics2DComponentV2 : MonoBehaviour {
 
 		if (_grounded || _falling)
 		{
-			var startPoint = new Vector3(_box.xMin + Margin, _box.center.y, _trans.position.z);
-			var endPoint = new Vector3(_box.xMax - Margin, _box.center.y, _trans.position.z);
-
-			var distance = _box.height / 2f + (_grounded ? Margin : Mathf.Abs(_velocity.y * Time.deltaTime));
-
-			var connected = false;
+			var downRayLength = _box.height / 2f + (_grounded ? Margin : Mathf.Abs(_velocity.y * Time.deltaTime));
+			var connection = false;
+			var lastConnection = 0;
+			var min = new Vector2(_box.xMin + Margin, _box.center.y);
+			var max = new Vector2(_box.xMax - Margin, _box.center.y);
+			var downRays = new RaycastHit2D[VerticalRays];
 
 			for (int i = 0; i < VerticalRays; i++)
 			{
 				var lerpAmount = (float)i / ((float)VerticalRays - 1);
-				var origin = Vector3.Lerp(startPoint, endPoint, lerpAmount);
+				var start = Vector2.Lerp(min, max, lerpAmount);
+				var end = start + Vector2.down * downRayLength;
+				Debug.Log(start.ToString() + " " + end.ToString());
+				downRays[i] = Physics2D.Linecast(start, end, PlateformLayer.DownColision);
 
-				var hit = Physics2D.Raycast(origin, Vector2.down, distance, LayerWall);
-
-				if (hit.transform != null)
+				if (downRays[i].fraction > 0f)
 				{
-					connected = true;
-					_grounded = true;
-					++_frameOnGround;
-					_falling = false;
-					_trans.Translate(Vector3.down * (hit.distance - _box.height / 2f));
-					_velocity.y = 0f;
-					break;
+					connection = true;
+					lastConnection = i;
 				}
 			}
-			
-			if (!connected)
+			if (connection)
+			{
+				_grounded = true;
+				++_frameOnGround;
+				_falling = false;
+				_velocity.y = 0f;
+				_trans.position += Vector3.down * (-downRays[lastConnection].point.y + _box.yMin);
+			}
+			else
 			{
 				_grounded = false;
 				_frameOnGround = 0;
 			}
 		}
 	}
-
 	private void LateralMove()
 	{
 		_velocity.x = _moveX;
@@ -145,29 +140,33 @@ public class Physics2DComponentV2 : MonoBehaviour {
 	{
 		if (_grounded || _velocity.y > 0f)
 		{
-			var startPoint = new Vector3(_box.xMin + Margin, _box.center.y, _trans.position.z);
-			var endPoint = new Vector3(_box.xMax - Margin, _box.center.y, _trans.position.z);
-
-			var distance = _box.height / 2f + (_grounded ? Margin : Mathf.Abs(_velocity.y * Time.deltaTime));
-			Debug.Log("Test top");
+			var upRayLength = _grounded ? Margin : _velocity.y * Time.deltaTime;
+			var connection = false;
+			var lastConnection = 0;
+			var min = new Vector2(_box.xMin + Margin, _box.center.y);
+			var max = new Vector2(_box.xMax - Margin, _box.center.y);
+			var upRays = new RaycastHit2D[VerticalRays];
 
 			for (int i = 0; i < VerticalRays; i++)
 			{
 				var lerpAmount = (float)i / ((float)VerticalRays - 1);
-				var origin = Vector3.Lerp(startPoint, endPoint, lerpAmount);
+				var start = Vector2.Lerp(min, max, lerpAmount);
+				var end = start + Vector2.up * (upRayLength + _box.height / 2f);
 
-				var hit = Physics2D.Raycast(origin, Vector2.up, distance, LayerWall);
+				upRays[i] = Physics2D.Linecast(start, end, PlateformLayer.UpCollision);
 
-				if (hit.transform != null)
+				if (upRays[i].fraction > 0f)
 				{
-					Debug.LogWarning("HIT TOP !");
-					_falling = true;
-					_trans.Translate(Vector2.up * (hit.distance - _box.height / 2f));
-					_velocity.y = 0f;
-					break;
+					connection = true;
+					lastConnection = i;
 				}
+			}
+
+			if (connection)
+			{
+				_velocity.y = 0f;
+				_trans.position += Vector3.up * (upRays[lastConnection].point.y - _box.yMax);
 			}
 		}
 	}
-
 }

@@ -5,16 +5,10 @@ using UnityEngine;
 public class PawnComponent : MonoBehaviour {
 
 
-	private Transform _trans;
-
-
 	private void Awake()
 	{
-		_trans = transform;
 		_sr = GetComponentInChildren<SpriteRenderer>();
-		_col = GetComponent<BoxCollider2D>();
 		_physic = GetComponent<Physics2DComponentV2>();
-		//_rigid = GetComponent<Rigidbody2D>();
 		_nJumpLeft = NJump;
 	}
 	private void Reset()
@@ -72,9 +66,6 @@ public class PawnComponent : MonoBehaviour {
 	public LayerMask LayerWakeable;
 
 	public EJumpState StateJump { get; private set; }
-
-	private BoxCollider2D _col;
-	//private Rigidbody2D _rigid;
 	private Physics2DComponentV2 _physic;
 
 	private bool _inputJumpDown;
