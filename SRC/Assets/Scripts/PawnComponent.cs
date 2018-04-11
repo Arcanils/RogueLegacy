@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,13 +17,15 @@ public class PawnComponent : MonoBehaviour {
 		SpeedMove = 10f;
 		NJump = 3;
 		ForceJump = 40f;
+		DurationDash = 0.5f;
+		NDash = 1;
 	}
 
 	private void FixedUpdate()
 	{
 		MoveLogic();
 		JumpLogic();
-		//Jump()
+		DashLogic();
 	}
 
 	#region Move
@@ -33,6 +36,8 @@ public class PawnComponent : MonoBehaviour {
 
 	public void InputMove(float inputX)
 	{
+		if (_dash != null)
+			return;
 		_deltaMove = inputX * SpeedMove;
 		_physic.Move(_deltaMove);
 	}
@@ -52,13 +57,16 @@ public class PawnComponent : MonoBehaviour {
 		_deltaMove = 0f;
 	}
 
+
 	#endregion
 
+	#region Jump
 	public enum EJumpState
 	{
 		GROUNDED,
 		JUMPING,
 		FALLING,
+		DASH,
 	}
 
 	public float ForceJump;
@@ -78,8 +86,16 @@ public class PawnComponent : MonoBehaviour {
 
 	private void JumpLogic()
 	{
+		if (_dash != null)
+		{
+			StateJump = EJumpState.DASH;
+			return;
+		}
 		if (_physic.Grounded)
+		{
 			StateJump = EJumpState.GROUNDED;
+			_nDashLeft = NDash;
+		}
 		else if (_physic.Velocity.y < 0f)
 			StateJump = EJumpState.FALLING;
 		else
@@ -96,4 +112,47 @@ public class PawnComponent : MonoBehaviour {
 			_physic.ImpulseForce(new Vector2(0f, ForceJump));
 		}
 	}
+	#endregion
+
+	#region Dash
+
+	public float DurationDash;
+	public int NDash;
+	private int _nDashLeft;
+	private IEnumerator _dash;
+
+	public void Dash(bool dashRight)
+	{
+		if (_dash != null || _nDashLeft <= 0)
+			return;
+
+		_dash = DashEnum(dashRight);
+		--_nDashLeft;
+	}
+
+	private IEnumerator DashEnum(bool dashRight)
+	{
+		_physic.SetActiveVelocityVertical(false);
+		_physic.Move(dashRight ? SpeedMove * 2f : -SpeedMove * 2f);
+		for (float t = 0f, perc = 0f; perc < 1f; t += Time.fixedDeltaTime)
+		{
+			perc = t / DurationDash;
+			yield return null;
+		}
+
+		_physic.SetActiveVelocityVertical(true);
+		_physic.Move(0f);
+	}
+
+	private void DashLogic()
+	{
+		if (_dash != null)
+		{
+			if (!_dash.MoveNext())
+			{
+				_dash = null;
+			}
+		}
+	}
+	#endregion
 }

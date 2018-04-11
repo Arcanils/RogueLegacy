@@ -487,6 +487,8 @@ MonoBehaviour:
   LayerWakeable:
     serializedVersion: 2
     m_Bits: 256
+  DurationDash: 0
+  NDash: 0
 --- !u!4 &443457533
 Transform:
   m_ObjectHideFlags: 0
@@ -1184,10 +1186,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpeedMove: 13
   ForceJump: 30
-  NJump: 5
+  NJump: 2
   LayerWakeable:
     serializedVersion: 2
     m_Bits: 256
+  DurationDash: 0.25
+  NDash: 1
 --- !u!61 &986261556
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2389,6 +2393,8 @@ MonoBehaviour:
   LayerWakeable:
     serializedVersion: 2
     m_Bits: 256
+  DurationDash: 0
+  NDash: 0
 --- !u!61 &1452684540
 BoxCollider2D:
   m_ObjectHideFlags: 0

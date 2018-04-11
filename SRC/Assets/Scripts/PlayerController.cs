@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour {
 
 	private const string _keyMoveX = "Horizontal";
 	private const string _keyJump = "Jump";
+	private const string _keyLeftDash = "LeftDash";
+	private const string _keyRightDash = "RightDash";
 
 	private void Update()
 	{
@@ -18,5 +20,11 @@ public class PlayerController : MonoBehaviour {
 			Pawn.InputJump(true);
 		else if (Input.GetButtonUp(_keyJump))
 			Pawn.InputJump(false);
+
+		if (Input.GetButton(_keyLeftDash))
+			Pawn.Dash(false);
+
+		if (Input.GetButton(_keyRightDash))
+			Pawn.Dash(true);
 	}
 }

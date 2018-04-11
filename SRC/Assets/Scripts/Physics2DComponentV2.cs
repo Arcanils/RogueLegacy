@@ -26,20 +26,34 @@ public class Physics2DComponentV2 : MonoBehaviour {
 	private bool _falling;
 	private float _moveX;
 
+	private bool _enableVerticalVelocity;
+
 	private BoxCollider2D _col;
 	private Transform _trans;
 	private void Awake()
 	{
 		_trans = transform;
 		_col = GetComponent<BoxCollider2D>();
+		_enableVerticalVelocity = true;
 	}
 
 	private void FixedUpdate()
 	{
 		_box = new Rect(_col.bounds.min.x, _col.bounds.min.y, _col.bounds.size.x, _col.bounds.size.y);
-		GravityMove();
+
+		if (_enableVerticalVelocity && !_grounded)
+		{
+			_velocity.y = Mathf.Max(_velocity.y - Gravity, -Maxfall);
+			_frameOnGround = 0;
+		}
+
+		if (_enableVerticalVelocity)
+			GravityMove();
+
 		LateralMove();
-		TopCollision();
+
+		if (_enableVerticalVelocity)
+			TopCollision();
 	}
 
 	private void LateUpdate()
@@ -57,14 +71,22 @@ public class Physics2DComponentV2 : MonoBehaviour {
 		_velocity = force;
 	}
 
-	private void GravityMove()
+	public void SetActiveVelocityVertical(bool enable)
 	{
-		if (!_grounded)
+		if (!enable)
 		{
-			_velocity.y = Mathf.Max(_velocity.y - Gravity, -Maxfall);
+			_enableVerticalVelocity = false;
+			_velocity.y = 0f;
+			_grounded = false;
+			_falling = false;
 			_frameOnGround = 0;
 		}
+		else
+			_enableVerticalVelocity = true;
+	}
 
+	private void GravityMove()
+	{
 		_falling |= _velocity.y < 0f;
 
 		if (_grounded || _falling)
@@ -81,7 +103,6 @@ public class Physics2DComponentV2 : MonoBehaviour {
 				var lerpAmount = (float)i / ((float)VerticalRays - 1);
 				var start = Vector2.Lerp(min, max, lerpAmount);
 				var end = start + Vector2.down * downRayLength;
-				Debug.Log(start.ToString() + " " + end.ToString());
 				downRays[i] = Physics2D.Linecast(start, end, PlateformLayer.DownColision);
 
 				if (downRays[i].fraction > 0f)
