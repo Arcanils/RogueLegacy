@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class PawnComponent : MonoBehaviour {
 
+	private Anim2DComponent _anim;
 
 	private void Awake()
 	{
 		_sr = GetComponentInChildren<SpriteRenderer>();
+		_anim = _sr.GetComponent<Anim2DComponent>();
 		_physic = GetComponent<Physics2DComponentV2>();
 		_nJumpLeft = NJump;
 	}
@@ -45,6 +47,11 @@ public class PawnComponent : MonoBehaviour {
 	private void MoveLogic()
 	{
 		//_trans.position += new Vector3(_deltaMove, 0f, 0f);
+
+		if (Math.Abs(_deltaMove) > Mathf.Epsilon)
+			_anim.PlayAnim("Run");
+		else
+			_anim.PlayAnim("Idle");
 
 		if (_deltaMove < 0f)
 		{

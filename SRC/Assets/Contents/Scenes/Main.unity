@@ -2971,6 +2971,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2035554219}
   - component: {fileID: 2035554220}
+  - component: {fileID: 2035554221}
   m_Layer: 0
   m_Name: Graph
   m_TagString: Untagged
@@ -3035,6 +3036,50 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &2035554221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2035554218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 838f71f6605ac644689bad256afafc13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartAnim: Idle
+  AnimDatas:
+  - Key: Idle
+    Value:
+      Frames:
+      - {fileID: 21300000, guid: d9bc96ac401c64043a30b84c3006a109, type: 3}
+      - {fileID: 21300000, guid: d0075988365a2714c8a5b0d5fbfa3d87, type: 3}
+      - {fileID: 21300000, guid: 640a3b0c3b7b4a04181f4e000fe1cf8f, type: 3}
+      - {fileID: 21300000, guid: a48ae640ed6fa5e40987c47cce64741a, type: 3}
+      - {fileID: 21300000, guid: 76dd40abe82fe394b9024ae8646b1cda, type: 3}
+      - {fileID: 21300000, guid: 1981185e90665be45ada511aa2f273cc, type: 3}
+      - {fileID: 21300000, guid: 21206ae5ed725c54e981a68d8338e71e, type: 3}
+      - {fileID: 21300000, guid: 618fdcc5ab7b8174d9a7be954bee1009, type: 3}
+      - {fileID: 21300000, guid: c06ae408682c09548b847c79cd08bf21, type: 3}
+      - {fileID: 21300000, guid: 182292b3463cfab44bb2d54a9503c17e, type: 3}
+      Duration: 1
+      Loop: 1
+  - Key: Run
+    Value:
+      Frames:
+      - {fileID: 21300000, guid: b94a5f6e7ce56284da7a2c1f93ee4a4d, type: 3}
+      - {fileID: 21300000, guid: 91395212c9d191443a028d807cab931c, type: 3}
+      - {fileID: 21300000, guid: e7e21f5bc2cf90c4986120510678a490, type: 3}
+      - {fileID: 21300000, guid: a0f8fe0b1b7be1249a901c7e4d6e6aeb, type: 3}
+      - {fileID: 21300000, guid: ca35b76f7e8e95848af605364dff4c0f, type: 3}
+      - {fileID: 21300000, guid: 7966d43e550f8e745a44e107aa392ac2, type: 3}
+      - {fileID: 21300000, guid: d0acf61d61d33ff4aaa58646437e30fc, type: 3}
+      - {fileID: 21300000, guid: 16a034c6b60c6b0499c2053ad59e8d04, type: 3}
+      - {fileID: 21300000, guid: cf6729fb283a9f64ba26deb3483eeb05, type: 3}
+      - {fileID: 21300000, guid: 5e0f462114c6ccf4b8726a53ed792c2c, type: 3}
+      Duration: 0.5
+      Loop: 1
+  Target: {fileID: 2035554220}
 --- !u!43 &2084862872
 Mesh:
   m_ObjectHideFlags: 0
