@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class BossPawn : MonoBehaviour
 {
-	public GameObject PrefabSimpleBullet;
-	public GameObject PrefabBounceBullet;
-	public GameObject PrefabFragBullet;
+	public GameObject[] PrefabBullet;
+
+
 
 	public Transform SpawnAttack;
 
@@ -21,14 +22,23 @@ public class BossPawn : MonoBehaviour
 
 	public void BarrageAttack()
 	{
-		StartCoroutine(BarrageAttackEnum(PrefabSimpleBullet, Vector2.down, 10f, true, 0.1f, 100));
+		StartCoroutine(BarrageAttackEnum(PrefabBullet[0], Vector2.down, 10f, true, 0.1f, 100));
 	}
 
 	public void ShotgunAttack()
 	{
-		StartCoroutine(ShotgunAttackEnum(PrefabSimpleBullet, Vector2.down, 30f, 0.5f, 6, 4));
+		StartCoroutine(ShotgunAttackEnum(PrefabBullet[0], Vector2.down, 30f, 0.5f, 6, 4));
 	}
 
+	public void SpawnMinion()
+	{
+
+	}
+
+	public void Spawn()
+	{
+
+	}
 
 	
 	private IEnumerator BarrageAttackEnum(GameObject bullet, Vector2 baseDirection, float angleOffset, bool sensHoraire, float fireRate, int nBullet)
@@ -40,10 +50,10 @@ public class BossPawn : MonoBehaviour
 
 		for (int i = nBullet - 1; i >= 0; --i)
 		{
-			dirEuler.z += angleOffset;
 			var orientation = Quaternion.Euler(dirEuler);
 			   SpawnBullet(bullet, orientation);
-
+			
+			dirEuler.z += angleOffset;
 			yield return wait;
 		}
 	}
