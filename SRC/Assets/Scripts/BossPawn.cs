@@ -11,29 +11,59 @@ public class BossPawn : MonoBehaviour
 
 	public Transform SpawnAttack;
 
-	private void Update()
-	{
-		if (Input.GetKeyDown(KeyCode.T))
-			BarrageAttack();
-
-		if (Input.GetKeyDown(KeyCode.Y))
-			ShotgunAttack();
-	}
 
 	public IEnumerator Attack(BossDataAttack data, Transform target = null)
 	{
 		var bullet = PrefabBullet[(int)data.TypeBullet];
-		var begAngle = GetAngleFromDirection(data.BaseDirection);
-		var targetObj = (data.Target & BossDataAttack.ETarget.PLAYER) == BossDataAttack.ETarget.PLAYER ? target : null;
-		var spawnPos = SpawnAttack.position;
+
+		float begAngle = 0f;
+		Transform targetObj = null;
+
+		var isBaseDirMode = (data.TypeTargeting & BossDataAttack.ETarget.BASE_DIRECTION) == BossDataAttack.ETarget.BASE_DIRECTION;
+		var isPlayerMode = (data.TypeTargeting & BossDataAttack.ETarget.PLAYER) == BossDataAttack.ETarget.PLAYER;
+		
+		if (isBaseDirMode)
+		{
+			begAngle = GetAngleFromDirection(data.BaseDirection);
+			Debug.LogError(data.BaseDirection.ToString() + " => " + begAngle);
+		}
+		if (isPlayerMode)
+		{
+			targetObj = target;
+		}
+
+		var spawnPos = SpawnAttack;
 		var fireRate = data.FireRate;
-		var range = data.OffsetAngle;
-		var duration = data.Duration;
-		var nTick = data.NRound;
-		var nBullet = data.NBullet;
+		var range = data.RangeShot;
+
+
+		float duration = 0f;
+		int nTick = 0;
+
+		var isDurationMode = (data.TypeDuration & BossDataAttack.EDuration.DURATION) == BossDataAttack.EDuration.DURATION;
+		var isOutOfAmmoMode = (data.TypeDuration & BossDataAttack.EDuration.OUT_OF_AMMO) == BossDataAttack.EDuration.OUT_OF_AMMO;
+
+		if (isDurationMode && isOutOfAmmoMode)
+		{
+			duration = data.Duration;
+			nTick = data.NRound;
+		}
+		else if (isDurationMode)
+		{
+			duration = data.Duration;
+			nTick = -1;
+		}
+		else if (isOutOfAmmoMode)
+		{
+			duration = -1f;
+			nTick = data.NRound;
+		}
+
+		var nBullet = data.NBulletEachRound;
 
 		IEnumerator valueToReturn = null;
-		switch (data.Attack)
+		
+		switch (data.TypeAttack)
 		{
 			case BossDataAttack.EAttack.SHOTGUN:
 				valueToReturn = SpawnBulletEachRound(
@@ -48,6 +78,17 @@ public class BossPawn : MonoBehaviour
 					nBullet);
 				break;
 			case BossDataAttack.EAttack.BARRAGE:
+				valueToReturn = SpawnBulletEachRoundAndTurn(
+					bullet,
+					targetObj,
+					spawnPos,
+					begAngle,
+					data.RangeGlobalAttack,
+					range,
+					fireRate,
+					duration,
+					nTick,
+					nBullet);
 				break;
 			case BossDataAttack.EAttack.SPAWN_MINION:
 				break;
@@ -56,70 +97,60 @@ public class BossPawn : MonoBehaviour
 		return valueToReturn;
 	}
 
-	public void BarrageAttack()
+	private static IEnumerator SpawnBulletEachRoundAndTurn(
+		GameObject bullet,
+		Transform target,
+		Transform spawnPos,
+		float baseAngle, float rangeGlobalAttack, float rangeShot, float fireRate, float duration,
+		int nRound, int nInstance = 1)
 	{
-		StartCoroutine(BarrageAttackEnum(PrefabBullet[0], Vector2.down, 10f, true, 0.1f, 100));
-	}
-
-	public void ShotgunAttack()
-	{
-		StartCoroutine(SpawnBulletEachRound(
-			PrefabBullet[0], null, SpawnAttack.position,
-			GetAngleFromDirection(Vector2.down),
-			30f, 0.5f,
-			0f, 4, 6));
-	}
-
-	public void SpawnMinion()
-	{
-
-	}
-
-	public void Spawn()
-	{
-
-	}
-
-	
-	private IEnumerator BarrageAttackEnum(GameObject bullet, Vector2 baseDirection, 
-		float angleOffset, bool sensHoraire, float fireRate, int nBullet)
-	{
-		/*
-		var dirEuler = 
-		if (sensHoraire)
-			angleOffset *= -1;
 		var wait = new WaitForSeconds(fireRate);
 
-		for (int i = nBullet - 1; i >= 0; --i)
+		var angleToTarget = (target != null ? GetAngleFromDirection(target.position - spawnPos.position) : 0f);
+		baseAngle += angleToTarget -rangeShot / 2f;
+		var endBaseAngle = baseAngle + rangeGlobalAttack;
+
+		int nTurnForDuration = duration <= 0f ? int.MaxValue : ((int)(duration * 1000f) % (int)(fireRate * 1000f)) / 1000;
+
+		for (int i = Mathf.Min(nRound, nTurnForDuration) - 1; i >= 0; --i)
 		{
-			var orientation = Quaternion.Euler(dirEuler);
-			   SpawnBullet(bullet, orientation);
-			
-			dirEuler.z += angleOffset;
+			var begAngle = Mathf.Lerp(baseAngle, endBaseAngle, i / (float)(nRound - 1));
+			var endAngle = begAngle + rangeShot;
+			SpawnBullet(bullet, spawnPos.position, begAngle, endAngle, nInstance);
+
 			yield return wait;
 		}
-		*/
-		yield break;
+
+		var valueToWait = duration - nTurnForDuration * fireRate;
+
+		if (valueToWait > 0f)
+			yield return new WaitForSeconds(valueToWait);
 	}
 
 	private static IEnumerator SpawnBulletEachRound(
 		GameObject bullet,
 		Transform target,
-		Vector3 spawnPos,
+		Transform spawnPos,
 		float baseAngle, float range, float fireRate, float duration,
 		int nRound, int nInstance = 1)
 	{
 		var wait = new WaitForSeconds(fireRate);
+		
+		int nTurnForDuration = duration <= 0f ? int.MaxValue : ((int)(duration * 1000f) % (int)(fireRate * 1000f)) / 1000;
 
-		for (int i = nRound - 1; i >= 0; --i)
+		Debug.Log("ATTACK START : " + nRound + "|" + nTurnForDuration);
+		for (int i = Mathf.Min(nRound, nTurnForDuration) - 1; i >= 0; --i)
 		{
-			var angleToTarget = (target != null ? GetAngleFromDirection(target.position - spawnPos) : 0f);
+			Debug.Log("ATTACK ROUND " + i);
+			var angleToTarget = (target != null ? GetAngleFromDirection(target.position - spawnPos.position) : 0f);
 			var begAngle = baseAngle + angleToTarget - range / 2f;
 			var endAngle = begAngle + range;
-			SpawnBullet(bullet, spawnPos, begAngle, endAngle, nInstance);
+			SpawnBullet(bullet, spawnPos.position, begAngle, endAngle, nInstance);
 
+			Debug.Log("ATTACK WAIT");
 			yield return wait;
 		}
+		Debug.Log("ATTACK END");
 
 		var valueToWait = duration - nRound * fireRate;
 
@@ -131,7 +162,7 @@ public class BossPawn : MonoBehaviour
 	{
 		for (int j = nInstance - 1; j >= 0; --j)
 		{
-			var perc = Mathf.Clamp01(j / (float)(nInstance - 1));
+			var perc = nInstance <= 1 ? 0.5f : Mathf.Clamp01(j / (float)(nInstance - 1));
 			var orientation = Quaternion.Euler(0f, 0f, Mathf.Lerp(begAngle, endAngle, perc));
 			var instance = Object.Instantiate(bullet, position, orientation);
 		}
@@ -141,6 +172,6 @@ public class BossPawn : MonoBehaviour
 	{
 		dir.Normalize();
 
-		return Mathf.Atan2(dir.y, dir.x) - 90f;
+		return Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 	}
 }

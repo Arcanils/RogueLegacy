@@ -3,3 +3,4 @@ v15
 *.csproj
 *.sln
 /SRC/Temp/TarGZ
+/SRC/Temp

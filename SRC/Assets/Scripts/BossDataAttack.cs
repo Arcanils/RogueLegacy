@@ -26,21 +26,26 @@ public class BossDataAttack : ScriptableObject
 		BASE_DIRECTION = 0x01,
 		PLAYER = 0x02,
 	}
+
+	[System.Flags]
 	public enum EDuration
 	{
 		OUT_OF_AMMO = 0x01,
 		DURATION = 0x02,
 	}
-
-	public EAttack Attack;
+	
+	public EAttack TypeAttack;
 	public ETypeBullet TypeBullet;
-	public ETarget Target;
+	[HideInInspector]
+	public ETarget TypeTargeting;
+	[HideInInspector]
+	public EDuration TypeDuration;
 
 	public float Duration;
 	public float FireRate;
-	public float OffsetAngle;
-	public bool SensHoraire;
-	public int NBullet;
+	public float RangeGlobalAttack;
+	public float RangeShot;
+	public int NBulletEachRound;
 	public int NRound;
 
 	public Vector2 BaseDirection;

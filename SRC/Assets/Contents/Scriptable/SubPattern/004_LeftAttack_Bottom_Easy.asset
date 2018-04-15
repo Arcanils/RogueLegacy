@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c90d872e22016b94094c431678a031f1, type: 3}
+  m_Name: 004_LeftAttack_Bottom_Easy
+  m_EditorClassIdentifier: 
+  Move: {fileID: 11400000, guid: eb2a5a251b82f38469571163f2942f32, type: 2}
+  Attacks:
+  - {fileID: 11400000, guid: 24905c09b5127944fa32c677a9d3d1de, type: 2}
+  - {fileID: 11400000, guid: 24905c09b5127944fa32c677a9d3d1de, type: 2}

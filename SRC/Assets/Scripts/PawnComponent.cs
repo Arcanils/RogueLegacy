@@ -25,6 +25,8 @@ public class PawnComponent : MonoBehaviour {
 
 	private void FixedUpdate()
 	{
+		if (_isDead)
+			return;
 		MoveLogic();
 		JumpLogic();
 		DashLogic();
@@ -38,7 +40,7 @@ public class PawnComponent : MonoBehaviour {
 
 	public void InputMove(float inputX)
 	{
-		if (_dash != null)
+		if (_dash != null || _isDead)
 			return;
 		_deltaMove = inputX * SpeedMove;
 		_physic.Move(_deltaMove);
@@ -161,5 +163,58 @@ public class PawnComponent : MonoBehaviour {
 			}
 		}
 	}
+	#endregion
+
+	#region Life
+
+	public int HP = 3;
+	public AnimationCurve CurveBlink;
+	public int NBlink;
+	public float DurationImmortal;
+
+	private int _nHit;
+	private bool _isImmortal;
+	private bool _isDead;
+
+	public void HitMe()
+	{
+		Debug.LogWarning("HitMe");
+		if (_isImmortal || _isDead)
+			return;
+
+		if (++_nHit >= HP)
+			StartCoroutine(DeadEnum());
+		else
+			StartCoroutine(HitEnum());
+	}
+
+	private IEnumerator HitEnum()
+	{
+		Debug.LogWarning("AnimHit");
+		_isImmortal = true;
+		var beg = Color.white;
+		var end = new Color(1f, 1f, 1f, 0f);
+		for (float t = 0f, perc = 0f; perc < 1f; t += Time.deltaTime)
+		{
+			perc = Mathf.Clamp01(t / DurationImmortal);
+			_sr.color = Color.Lerp(beg, end, CurveBlink.Evaluate(perc * 2f * NBlink));
+			yield return null;
+		}
+
+		_isImmortal = false;
+	}
+
+	private IEnumerator DeadEnum()
+	{
+		_isDead = true;
+		_physic.SetActiveVelocityVertical(true);
+		_physic.Move(0f);
+		_anim.PlayAnim("Dead");
+
+		yield return new WaitForSeconds(2f);
+
+		//InvokeScore;
+	}
+
 	#endregion
 }

@@ -8,16 +8,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a61e715e5c9fe3c49bb146236c59aa1e, type: 3}
-  m_Name: BossDataAttack
+  m_Script: {fileID: 11500000, guid: c90d872e22016b94094c431678a031f1, type: 3}
+  m_Name: 000_SetBottomRight
   m_EditorClassIdentifier: 
-  Attack: 0
-  TypeBullet: 0
-  Target: 1
-  Duration: 0
-  FireRate: 0
-  OffsetAngle: 0
-  SensHoraire: 0
-  NBullet: 0
-  NRound: 0
-  BaseDirection: {x: 0, y: 0}
+  Move: {fileID: 11400000, guid: 325a5b9dccd93324e9fb3fb36a4996df, type: 2}
+  Attacks: []

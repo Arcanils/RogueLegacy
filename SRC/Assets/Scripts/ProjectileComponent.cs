@@ -30,7 +30,10 @@ public class ProjectileComponent : MonoBehaviour {
 		if (collision.transform.tag == "Player")
 		{
 			Debug.Log("HitPlayer !");
-			//Inflict Dmg ou autre;
+			var script = collision.transform.GetComponent<PawnComponent>();
+
+			if (script != null)
+				script.HitMe();
 		}
 		DestroyBullet();
 	}
