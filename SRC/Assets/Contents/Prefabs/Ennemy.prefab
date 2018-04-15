@@ -19,6 +19,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4899356224680628}
+  - component: {fileID: 114551275182503572}
+  - component: {fileID: 114769508611528162}
   m_Layer: 11
   m_Name: Ennemy
   m_TagString: Untagged
@@ -50,8 +52,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1860175517581244}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.83, z: 1}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4899356224680628}
   m_RootOrder: 0
@@ -101,6 +103,51 @@ MonoBehaviour:
       Duration: 0.6
       Loop: 1
   Target: {fileID: 212701140666579692}
+--- !u!114 &114551275182503572
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1826280313864662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e326b215c652f3647b8c1a5d73563476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrefabBullet:
+  - {fileID: 1281777146575196, guid: fc140e12e0ca63f408a5f4a916c29cf2, type: 2}
+  - {fileID: 1685143028727844, guid: 83017d424af805c4998086519446ceb1, type: 2}
+  - {fileID: 1281777146575196, guid: fc140e12e0ca63f408a5f4a916c29cf2, type: 2}
+  SpawnAttack: {fileID: 4899356224680628}
+--- !u!114 &114769508611528162
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1826280313864662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b3c133521560d54c93ae3ea3416ce6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BotLeftLimit: {x: -14.5, y: -8, z: 0}
+  TopRightLimit: {x: 14.5, y: 8, z: 0}
+  NCollumn: 3
+  NLine: 3
+  DurationMove: 3
+  Patterns:
+  - {fileID: 11400000, guid: d57b1996057e15641bed3277ad3e6c39, type: 2}
+  - {fileID: 11400000, guid: 09313641e3ef95e4cbd7a5e39a986cd9, type: 2}
+  - {fileID: 11400000, guid: 37978be3259260a45815d3a034412561, type: 2}
+  - {fileID: 11400000, guid: 782c428ce53342943883492706ce3839, type: 2}
+  - {fileID: 11400000, guid: 0176670af21a57140864a03bedd65ef8, type: 2}
+  - {fileID: 11400000, guid: f04e41ecc3624f34bb27d87a6dd6b398, type: 2}
+  - {fileID: 11400000, guid: 07f5b9569f8edb245b5f4363f8bb7759, type: 2}
+  - {fileID: 11400000, guid: 7573f468a3727b742980449274e88898, type: 2}
+  - {fileID: 11400000, guid: f26190c1a3f46374ca33453d0653665d, type: 2}
+  - {fileID: 11400000, guid: cde9bd682f189044bb35713526097af8, type: 2}
+  - {fileID: 11400000, guid: 0ea2438855d9a604bafae29682fddd2a, type: 2}
+  TimeBeetweenPatterns: 5
 --- !u!212 &212701140666579692
 SpriteRenderer:
   m_ObjectHideFlags: 1

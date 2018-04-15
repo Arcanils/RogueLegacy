@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f75c0987dfb94cf40968d227201a2b1d, type: 3}
+  m_Name: CrossAttack_Easy
+  m_EditorClassIdentifier: 
+  Attaks:
+  - {fileID: 11400000, guid: fb5061210ebcc4440a029afaa42384c4, type: 2}
+  - {fileID: 11400000, guid: 61d9b4ebfd33d434fab8600383c026e0, type: 2}
+  - {fileID: 11400000, guid: 92a91f458a9440c41965fb9b4c4c4626, type: 2}
+  - {fileID: 11400000, guid: c2e0842c1949bfe469691ae8a608c098, type: 2}

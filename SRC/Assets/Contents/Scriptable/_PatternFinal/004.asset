@@ -13,5 +13,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Easy:
   - {fileID: 11400000, guid: 603e26de444563547be18c7982dd6879, type: 2}
-  Medium: []
+  Medium:
+  - {fileID: 11400000, guid: 44c0b9cee81cd2f4d9cdd83b6180b498, type: 2}
   Hard: []

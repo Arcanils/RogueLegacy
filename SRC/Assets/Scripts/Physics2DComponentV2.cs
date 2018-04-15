@@ -40,25 +40,25 @@ public class Physics2DComponentV2 : MonoBehaviour {
 	private void FixedUpdate()
 	{
 		_box = new Rect(_col.bounds.min.x, _col.bounds.min.y, _col.bounds.size.x, _col.bounds.size.y);
-
+		
 		if (_enableVerticalVelocity && !_grounded)
 		{
 			_velocity.y = Mathf.Max(_velocity.y - Gravity, -Maxfall);
 			_frameOnGround = 0;
 		}
-
 		if (_enableVerticalVelocity)
 			GravityMove();
-
+		
 		LateralMove();
-
+		
 		if (_enableVerticalVelocity)
 			TopCollision();
 	}
 
 	private void LateUpdate()
 	{
-		_trans.Translate(_velocity * Time.deltaTime);
+		var deltaTime = Mathf.Min(Time.deltaTime, 1 / 30f);
+		_trans.Translate(_velocity * deltaTime);
 	}
 
 	public void Move(float moveXPower)
@@ -69,6 +69,8 @@ public class Physics2DComponentV2 : MonoBehaviour {
 	public void ImpulseForce(Vector2 force)
 	{
 		_velocity = force;
+		_grounded = false;
+		_falling = false;
 	}
 
 	public void SetActiveVelocityVertical(bool enable)
@@ -87,11 +89,12 @@ public class Physics2DComponentV2 : MonoBehaviour {
 
 	private void GravityMove()
 	{
+		var deltaTime = Mathf.Min(Time.deltaTime, 1 / 30f);
 		_falling |= _velocity.y < 0f;
 
 		if (_grounded || _falling)
 		{
-			var downRayLength = _box.height / 2f + (_grounded ? Margin : Mathf.Abs(_velocity.y * Time.deltaTime));
+			var downRayLength = _box.height / 2f + (_grounded ? Margin : Mathf.Abs(_velocity.y * deltaTime));
 			var connection = false;
 			var lastConnection = 0;
 			var min = new Vector2(_box.xMin + Margin, _box.center.y);
@@ -129,13 +132,13 @@ public class Physics2DComponentV2 : MonoBehaviour {
 	private void LateralMove()
 	{
 		_velocity.x = _moveX;
-
+		var deltaTime = Mathf.Min(Time.deltaTime, 1 / 30f);
 		if (_velocity.x != 0f)
 		{
 			var startPoint = new Vector3(_box.center.x, _box.yMin + Margin, _trans.position.z);
 			var endPoint = new Vector3(_box.center.x, _box.yMax - Margin, _trans.position.z);
 
-			var distance = _box.width / 2f + Mathf.Abs(_velocity.x * Time.deltaTime);
+			var distance = _box.width / 2f + Mathf.Abs(_velocity.x * deltaTime);
 			var dir = _velocity.x > 0f ? Vector2.right : Vector2.left;
 			
 

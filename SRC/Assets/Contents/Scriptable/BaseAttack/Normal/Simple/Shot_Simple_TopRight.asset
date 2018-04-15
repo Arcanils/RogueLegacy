@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a61e715e5c9fe3c49bb146236c59aa1e, type: 3}
+  m_Name: Shot_Simple_TopRight
+  m_EditorClassIdentifier: 
+  TypeAttack: 0
+  TypeBullet: 0
+  TypeTargeting: 1
+  TypeDuration: 1
+  Duration: 0
+  FireRate: 1
+  RangeGlobalAttack: 0
+  RangeShot: 30
+  NBulletEachRound: 3
+  NRound: 3
+  BaseDirection: {x: 1, y: 1}

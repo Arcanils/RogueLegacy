@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(BossDataAttack))]
+[CustomEditor(typeof(BossDataAttack)), CanEditMultipleObjects]
 public class BossDataAttackEditor : Editor {
 
 	public override void OnInspectorGUI()

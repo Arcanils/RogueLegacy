@@ -21,10 +21,17 @@ public class PlayerController : MonoBehaviour {
 		else if (Input.GetButtonUp(_keyJump))
 			Pawn.InputJump(false);
 
-		if (Input.GetButton(_keyLeftDash))
+		var valueLeftDash = Input.GetAxisRaw(_keyLeftDash);
+		if (valueLeftDash > 0f || Input.GetButton(_keyLeftDash))
 			Pawn.Dash(false);
 
-		if (Input.GetButton(_keyRightDash))
+		var valueRightDash = Input.GetAxisRaw(_keyRightDash);
+		if (valueRightDash > 0f || Input.GetButton(_keyRightDash))
 			Pawn.Dash(true);
+	}
+
+	public void Init(PawnComponent pawn)
+	{
+		Pawn = pawn;
 	}
 }

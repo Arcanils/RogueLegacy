@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c90d872e22016b94094c431678a031f1, type: 3}
+  m_Name: 0010_ Bounce_Target_TL_Easy
+  m_EditorClassIdentifier: 
+  Move: {fileID: 11400000, guid: aa08ac450e5d35e44a15213c1302f0af, type: 2}
+  Attacks:
+  - {fileID: 11400000, guid: c91b94c7f93021547973ad26f4417bf7, type: 2}

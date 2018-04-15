@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 114739461507354682}
   m_Layer: 13
   m_Name: PlayerPawn
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -162,6 +162,21 @@ MonoBehaviour:
       - {fileID: 21300000, guid: 5e0f462114c6ccf4b8726a53ed792c2c, type: 3}
       Duration: 0.5
       Loop: 1
+  - Key: Dead
+    Value:
+      Frames:
+      - {fileID: 21300000, guid: 63c0cec2220500f4a96a194a88a45bd2, type: 3}
+      - {fileID: 21300000, guid: a8d82dd6f1dfd994e84bd8eafe3cf49a, type: 3}
+      - {fileID: 21300000, guid: 2066bd48616a9c84d9257a6f8622e61b, type: 3}
+      - {fileID: 21300000, guid: 625c48c90a83358489c0530db9b8d6db, type: 3}
+      - {fileID: 21300000, guid: d9f5d25d168cdbc4cbd08a0389ff2124, type: 3}
+      - {fileID: 21300000, guid: b02a7d259013b8846938044398ade924, type: 3}
+      - {fileID: 21300000, guid: 464527aeb064a6349b6a2241e6797839, type: 3}
+      - {fileID: 21300000, guid: bcdd774d6499dba4697414499dc1f18a, type: 3}
+      - {fileID: 21300000, guid: b89571026719fff4b9d69cd9171f56f2, type: 3}
+      - {fileID: 21300000, guid: d5dad2b919bb6704888204c2ded7cf6b, type: 3}
+      Duration: 1
+      Loop: 0
   Target: {fileID: 212522590974031690}
 --- !u!114 &114433779344239708
 MonoBehaviour:
@@ -182,6 +197,27 @@ MonoBehaviour:
     m_Bits: 256
   DurationDash: 0.25
   NDash: 1
+  HP: 3
+  CurveBlink:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 0
+    m_RotationOrder: 0
+  NBlink: 6
+  DurationImmortal: 2
 --- !u!114 &114739461507354682
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ public class BossController : MonoBehaviour {
 	public PatternHandler[] Patterns;
 	public float TimeBeetweenPatterns;
 
+	public Action OnFinishPattern;
+
 	private PawnComponent _pawnPlayer;
 	private BossPawn _pawn;
 	private Vector3[,] _gridPos;
@@ -21,14 +24,20 @@ public class BossController : MonoBehaviour {
 	private int _xGridPosition;
 	private int _yGridPosition;
 	private Transform _trans;
+	private int _indexPattern;
+
 	private void Awake()
 	{
 		_trans = transform;
 		_pawn = GetComponent<BossPawn>();
-		Init(FindObjectOfType<PawnComponent>());
 	}
 
-	public void Init(PawnComponent pawnPlayer)
+	public int GetCurrentIndexPattern()
+	{
+		return _indexPattern + 1;
+	}
+
+	public void Init(PawnComponent pawnPlayer, PatternHandler.EDifficulty difficulty)
 	{
 		_pawnPlayer = pawnPlayer;
 		_gridPos = new Vector3[NLine, NCollumn];
@@ -44,20 +53,23 @@ public class BossController : MonoBehaviour {
 		_xGridPosition = (NCollumn / 2);
 		_yGridPosition = (NLine / 2);
 
-		StartCoroutine(IAEnum());
+		StartCoroutine(IAEnum(difficulty));
 	}
 
-	public IEnumerator IAEnum()
+	public IEnumerator IAEnum(PatternHandler.EDifficulty difficulty)
 	{
 		//Spawn
-		var indexPattern = -1;
-		while(indexPattern < Patterns.Length - 1)
+		_indexPattern = -1;
+		while(_indexPattern < Patterns.Length - 1)
 		{
-			indexPattern = (indexPattern + 1) % Patterns.Length;
-			yield return PlayPattern(Patterns[indexPattern].GetPattern(PatternHandler.EDifficulty.EASY));
+			_indexPattern = (_indexPattern + 1) % Patterns.Length;
+			yield return PlayPattern(Patterns[_indexPattern].GetPattern(difficulty));
 
 			yield return PlayIdle();
 		}
+
+		if (OnFinishPattern != null)
+			OnFinishPattern();
 	}
 
 	public IEnumerator PlayPattern(BossPattern pattern)

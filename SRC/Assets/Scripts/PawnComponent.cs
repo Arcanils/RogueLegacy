@@ -81,16 +81,19 @@ public class PawnComponent : MonoBehaviour {
 	public float ForceJump;
 	public int NJump;
 	public LayerMask LayerWakeable;
+	public int FrameInputJump = 10;
 
 	public EJumpState StateJump { get; private set; }
 	private Physics2DComponentV2 _physic;
 
 	private bool _inputJumpDown;
 	private int _nJumpLeft;
+	private int _nFrameInputJumpLeft;
 
 	public void InputJump(bool isDown)
 	{
 		_inputJumpDown = isDown;
+		_nFrameInputJumpLeft = FrameInputJump;
 	}
 
 	private void JumpLogic()
@@ -98,6 +101,7 @@ public class PawnComponent : MonoBehaviour {
 		if (_dash != null)
 		{
 			StateJump = EJumpState.DASH;
+			GhostJumpInput();
 			return;
 		}
 		if (_physic.Grounded)
@@ -114,13 +118,24 @@ public class PawnComponent : MonoBehaviour {
 		{
 			_nJumpLeft = NJump - 1;
 			_physic.ImpulseForce(new Vector2(0f, ForceJump));
+			_inputJumpDown = false;
 		}
 		else if (StateJump == EJumpState.FALLING && _inputJumpDown && _nJumpLeft > 0)
 		{
 			--_nJumpLeft;
+			_inputJumpDown = false;
 			_physic.ImpulseForce(new Vector2(0f, ForceJump));
 		}
+
+		GhostJumpInput();
 	}
+
+	private void GhostJumpInput()
+	{
+		if (_inputJumpDown && --_nFrameInputJumpLeft <= 0)
+			_inputJumpDown = false;
+	}
+
 	#endregion
 
 	#region Dash
@@ -171,6 +186,7 @@ public class PawnComponent : MonoBehaviour {
 	public AnimationCurve CurveBlink;
 	public int NBlink;
 	public float DurationImmortal;
+	public Action OnDeath;
 
 	private int _nHit;
 	private bool _isImmortal;
@@ -178,7 +194,6 @@ public class PawnComponent : MonoBehaviour {
 
 	public void HitMe()
 	{
-		Debug.LogWarning("HitMe");
 		if (_isImmortal || _isDead)
 			return;
 
@@ -190,7 +205,6 @@ public class PawnComponent : MonoBehaviour {
 
 	private IEnumerator HitEnum()
 	{
-		Debug.LogWarning("AnimHit");
 		_isImmortal = true;
 		var beg = Color.white;
 		var end = new Color(1f, 1f, 1f, 0f);
@@ -213,7 +227,8 @@ public class PawnComponent : MonoBehaviour {
 
 		yield return new WaitForSeconds(2f);
 
-		//InvokeScore;
+		if (OnDeath != null)
+			OnDeath();
 	}
 
 	#endregion

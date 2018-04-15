@@ -25,7 +25,6 @@ public class BossPawn : MonoBehaviour
 		if (isBaseDirMode)
 		{
 			begAngle = GetAngleFromDirection(data.BaseDirection);
-			Debug.LogError(data.BaseDirection.ToString() + " => " + begAngle);
 		}
 		if (isPlayerMode)
 		{
@@ -137,20 +136,16 @@ public class BossPawn : MonoBehaviour
 		var wait = new WaitForSeconds(fireRate);
 		
 		int nTurnForDuration = duration <= 0f ? int.MaxValue : ((int)(duration * 1000f) % (int)(fireRate * 1000f)) / 1000;
-
-		Debug.Log("ATTACK START : " + nRound + "|" + nTurnForDuration);
+		
 		for (int i = Mathf.Min(nRound, nTurnForDuration) - 1; i >= 0; --i)
 		{
-			Debug.Log("ATTACK ROUND " + i);
 			var angleToTarget = (target != null ? GetAngleFromDirection(target.position - spawnPos.position) : 0f);
 			var begAngle = baseAngle + angleToTarget - range / 2f;
 			var endAngle = begAngle + range;
 			SpawnBullet(bullet, spawnPos.position, begAngle, endAngle, nInstance);
-
-			Debug.Log("ATTACK WAIT");
+			
 			yield return wait;
 		}
-		Debug.Log("ATTACK END");
 
 		var valueToWait = duration - nRound * fireRate;
 
