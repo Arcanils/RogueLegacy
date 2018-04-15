@@ -4,3 +4,4 @@ v15
 *.sln
 /SRC/Temp/TarGZ
 /SRC/Temp
+/BUILD
