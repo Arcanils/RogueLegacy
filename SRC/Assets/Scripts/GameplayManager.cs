@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameplayManager : MonoBehaviour {
 
@@ -25,6 +26,14 @@ public class GameplayManager : MonoBehaviour {
 
 		yield return null;
 		player.transform.position = Vector3.zero;
+	}
+
+	private void Update()
+	{
+		if (Input.GetButtonUp("Replay"))
+		{
+			SceneManager.LoadScene(1);
+		}
 	}
 
 	private void CreateBoss(PawnComponent pawn)

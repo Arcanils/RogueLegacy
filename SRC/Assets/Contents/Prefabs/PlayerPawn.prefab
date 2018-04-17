@@ -189,13 +189,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 868012f2ca56df54583a338d6296914e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpeedMove: 13
+  SpeedMove: 11
   ForceJump: 30
   NJump: 2
   LayerWakeable:
     serializedVersion: 2
     m_Bits: 256
-  DurationDash: 0.25
+  FrameInputJump: 10
+  CoefDash: 3
+  DurationDash: 0.15
   NDash: 1
   HP: 3
   CurveBlink:
@@ -231,7 +233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Acceleration: 4
   MaxSpeed: 150
-  Gravity: 1.5
+  Gravity: 1.3
   Mass: 0
   Maxfall: 200
   Jump: 200

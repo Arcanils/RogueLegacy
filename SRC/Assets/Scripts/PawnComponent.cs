@@ -139,7 +139,7 @@ public class PawnComponent : MonoBehaviour {
 	#endregion
 
 	#region Dash
-
+	public float CoefDash = 3f;
 	public float DurationDash;
 	public int NDash;
 	private int _nDashLeft;
@@ -157,7 +157,7 @@ public class PawnComponent : MonoBehaviour {
 	private IEnumerator DashEnum(bool dashRight)
 	{
 		_physic.SetActiveVelocityVertical(false);
-		_physic.Move(dashRight ? SpeedMove * 2f : -SpeedMove * 2f);
+		_physic.Move(dashRight ? SpeedMove * CoefDash : -SpeedMove * CoefDash);
 		for (float t = 0f, perc = 0f; perc < 1f; t += Time.fixedDeltaTime)
 		{
 			perc = t / DurationDash;
